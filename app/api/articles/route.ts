@@ -25,7 +25,11 @@ export async function GET(request: Request) {
   query = query.order("created_at", { ascending: false })
 
   const { data, error } = await query
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  if (error) {
+    console.log("[v0] Articles GET error:", error.message, error.details, error.hint)
+    return NextResponse.json({ error: error.message }, { status: 500 })
+  }
+  console.log("[v0] Articles fetched:", data?.length, "items")
   return NextResponse.json(data ?? [])
 }
 
