@@ -1,16 +1,19 @@
 import { NextResponse } from "next/server"
-import { getArticleById, updateArticle, deleteArticle } from "@/lib/data"
+import { supabase } from "@/lib/supabase"
 
 export async function GET(
   _request: Request,
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
-  const article = getArticleById(id)
-  if (!article) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 })
-  }
-  return NextResponse.json(article)
+  const { data, error } = await supabase
+    .from("articles")
+    .select("*")
+    .eq("id", id)
+    .single()
+
+  if (error) return NextResponse.json({ error: "Not found" }, { status: 404 })
+  return NextResponse.json(data)
 }
 
 export async function PUT(
@@ -19,11 +22,28 @@ export async function PUT(
 ) {
   const { id } = await params
   const body = await request.json()
-  const article = updateArticle(id, body)
-  if (!article) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 })
+
+  const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() }
+  const allowedFields = [
+    "title", "slug", "description", "content", "category",
+    "image_url", "is_featured", "specs", "download_url", "enable_timer",
+  ]
+
+  for (const field of allowedFields) {
+    if (body[field] !== undefined) {
+      updateData[field] = body[field]
+    }
   }
-  return NextResponse.json(article)
+
+  const { data, error } = await supabase
+    .from("articles")
+    .update(updateData)
+    .eq("id", id)
+    .select()
+    .single()
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+  return NextResponse.json(data)
 }
 
 export async function DELETE(
@@ -31,9 +51,11 @@ export async function DELETE(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params
-  const deleted = deleteArticle(id)
-  if (!deleted) {
-    return NextResponse.json({ error: "Not found" }, { status: 404 })
-  }
+  const { error } = await supabase
+    .from("articles")
+    .delete()
+    .eq("id", id)
+
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
   return NextResponse.json({ success: true })
 }

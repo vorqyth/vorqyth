@@ -19,6 +19,7 @@ import {
   ChevronDown,
   Check,
   AlertCircle,
+  Shield,
 } from "lucide-react"
 import type { Article, SiteSettings, SocialProofItem } from "@/lib/data"
 
@@ -77,36 +78,36 @@ export function AdminDashboard() {
   const tabs = [
     {
       key: "settings" as Tab,
-      label: "اعدادات الموقع",
+      label: "Site Settings",
       icon: <Settings className="h-4 w-4" />,
     },
     {
       key: "posts" as Tab,
-      label: "ادارة المقالات",
+      label: "Manage Articles",
       icon: <FileText className="h-4 w-4" />,
     },
     {
       key: "social-proof" as Tab,
-      label: "اشعارات اجتماعية",
+      label: "Social Proof",
       icon: <Users className="h-4 w-4" />,
     },
   ]
 
   return (
-    <div className="min-h-screen bg-background" dir="rtl">
+    <div className="min-h-screen bg-zinc-950">
       {/* Header */}
-      <header className="border-b border-border/50 bg-card">
+      <header className="border-b border-white/5 bg-zinc-950/80 backdrop-blur-md">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-4 py-3">
           <div className="flex items-center gap-3">
             <div className="flex h-9 w-9 items-center justify-center rounded-lg border border-primary/30 bg-primary/10">
-              <span className="text-sm font-bold neon-text">V</span>
+              <span className="text-sm font-bold text-primary">V</span>
             </div>
             <div>
-              <h1 className="text-sm font-bold text-foreground">
-                لوحة التحكم
+              <h1 className="text-sm font-bold text-zinc-100">
+                Admin Panel
               </h1>
-              <p className="text-[10px] text-muted-foreground">
-                Vorqenox Admin
+              <p className="text-[10px] text-zinc-500">
+                Vorqenox Dashboard
               </p>
             </div>
           </div>
@@ -115,16 +116,16 @@ export function AdminDashboard() {
             onClick={() => {
               window.location.href = "/admin"
             }}
-            className="flex items-center gap-2 rounded-lg border border-border bg-transparent px-3 py-1.5 text-xs text-muted-foreground transition-all hover:border-destructive/50 hover:text-destructive"
+            className="flex items-center gap-2 rounded-lg border border-white/10 bg-transparent px-3 py-1.5 text-xs text-zinc-400 transition-all hover:border-destructive/50 hover:text-destructive"
           >
             <LogOut className="h-3.5 w-3.5" />
-            خروج
+            Logout
           </button>
         </div>
       </header>
 
       {/* Tab nav */}
-      <div className="border-b border-border/50 bg-card/50">
+      <div className="border-b border-white/5 bg-zinc-950/50">
         <div className="mx-auto flex max-w-7xl gap-1 overflow-x-auto px-4 py-2">
           {tabs.map((tab) => (
             <button
@@ -134,7 +135,7 @@ export function AdminDashboard() {
               className={`flex items-center gap-2 whitespace-nowrap rounded-lg px-4 py-2 text-xs font-medium transition-all ${
                 activeTab === tab.key
                   ? "border border-primary/50 bg-primary/10 text-primary"
-                  : "border border-transparent bg-transparent text-muted-foreground hover:bg-secondary hover:text-foreground"
+                  : "border border-transparent bg-transparent text-zinc-500 hover:bg-zinc-900 hover:text-zinc-300"
               }`}
             >
               {tab.icon}
@@ -213,7 +214,7 @@ function SiteSettingsPanel({
         setLoading(false)
       })
       .catch(() => {
-        showToast("فشل في تحميل الاعدادات", "error")
+        showToast("Failed to load settings", "error")
         setLoading(false)
       })
   }, [showToast])
@@ -228,9 +229,9 @@ function SiteSettingsPanel({
         body: JSON.stringify(settings),
       })
       if (!res.ok) throw new Error()
-      showToast("تم حفظ الاعدادات بنجاح")
+      showToast("Settings saved successfully")
     } catch {
-      showToast("فشل في حفظ الاعدادات", "error")
+      showToast("Failed to save settings", "error")
     }
     setSaving(false)
   }
@@ -241,36 +242,34 @@ function SiteSettingsPanel({
     <div className="space-y-6">
       {/* Site Identity */}
       <SectionCard
-        title="هوية الموقع"
+        title="Site Identity"
         icon={<Globe className="h-4 w-4" />}
       >
         <div className="grid gap-4 sm:grid-cols-2">
           <div>
-            <label className="mb-1.5 block text-xs text-muted-foreground">
-              اسم الموقع
+            <label className="mb-1.5 block text-xs text-zinc-500">
+              Site Name
             </label>
             <input
               type="text"
-              value={settings.siteName}
+              value={settings.site_name}
               onChange={(e) =>
-                setSettings({ ...settings, siteName: e.target.value })
+                setSettings({ ...settings, site_name: e.target.value })
               }
-              className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-              dir="ltr"
+              className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-muted-foreground">
-              رابط الشعار
+            <label className="mb-1.5 block text-xs text-zinc-500">
+              Logo URL
             </label>
             <input
               type="text"
-              value={settings.logoUrl}
+              value={settings.logo_url}
               onChange={(e) =>
-                setSettings({ ...settings, logoUrl: e.target.value })
+                setSettings({ ...settings, logo_url: e.target.value })
               }
-              className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-              dir="ltr"
+              className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
               placeholder="https://..."
             />
           </div>
@@ -279,63 +278,74 @@ function SiteSettingsPanel({
 
       {/* Color Picker */}
       <SectionCard
-        title="لون النيون"
+        title="Accent Color"
         icon={<Palette className="h-4 w-4" />}
       >
         <div className="flex items-center gap-4">
           <input
             type="color"
-            value={settings.neonColor}
+            value={settings.neon_color}
             onChange={(e) =>
-              setSettings({ ...settings, neonColor: e.target.value })
+              setSettings({ ...settings, neon_color: e.target.value })
             }
-            className="h-10 w-16 cursor-pointer rounded-lg border border-border bg-secondary"
+            className="h-10 w-16 cursor-pointer rounded-lg border border-white/10 bg-zinc-900"
           />
           <input
             type="text"
-            value={settings.neonColor}
+            value={settings.neon_color}
             onChange={(e) =>
-              setSettings({ ...settings, neonColor: e.target.value })
+              setSettings({ ...settings, neon_color: e.target.value })
             }
-            className="w-32 rounded-lg border border-border bg-secondary px-3 py-2 text-sm font-mono text-foreground focus:border-primary focus:outline-none"
-            dir="ltr"
+            className="w-32 rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm font-mono text-zinc-100 focus:border-primary focus:outline-none"
           />
           <div
             className="h-10 flex-1 rounded-lg"
             style={{
-              backgroundColor: settings.neonColor,
-              boxShadow: `0 0 20px ${settings.neonColor}`,
+              backgroundColor: settings.neon_color,
+              boxShadow: `0 0 20px ${settings.neon_color}`,
             }}
           />
         </div>
       </SectionCard>
 
+      {/* IPQS Toggle */}
+      <SectionCard
+        title="Security Shield"
+        icon={<Shield className="h-4 w-4" />}
+      >
+        <ToggleSwitch
+          label="IPQS Active"
+          description="Enable IPQualityScore for Tier 1 traffic (US, UK, CA, AU)"
+          checked={settings.ipqs_active ?? false}
+          onChange={(v) => setSettings({ ...settings, ipqs_active: v })}
+        />
+      </SectionCard>
+
       {/* Social Links */}
       <SectionCard
-        title="روابط التواصل"
+        title="Social Links"
         icon={<LinkIcon className="h-4 w-4" />}
       >
         <div className="grid gap-4 sm:grid-cols-2">
           {(["twitter", "telegram", "youtube", "instagram"] as const).map(
             (key) => (
               <div key={key}>
-                <label className="mb-1.5 block text-xs capitalize text-muted-foreground">
+                <label className="mb-1.5 block text-xs capitalize text-zinc-500">
                   {key}
                 </label>
                 <input
                   type="text"
-                  value={settings.socialLinks[key]}
+                  value={settings.social_links[key]}
                   onChange={(e) =>
                     setSettings({
                       ...settings,
-                      socialLinks: {
-                        ...settings.socialLinks,
+                      social_links: {
+                        ...settings.social_links,
                         [key]: e.target.value,
                       },
                     })
                   }
-                  className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-                  dir="ltr"
+                  className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
                   placeholder={`https://${key}.com/...`}
                 />
               </div>
@@ -349,9 +359,10 @@ function SiteSettingsPanel({
         onClick={handleSave}
         disabled={saving}
         className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
+        style={{ boxShadow: "0 0 15px rgba(255,215,0,0.3)" }}
       >
         <Save className="h-4 w-4" />
-        {saving ? "جاري الحفظ..." : "حفظ الاعدادات"}
+        {saving ? "Saving..." : "Save Settings"}
       </button>
     </div>
   )
@@ -376,7 +387,7 @@ function PostManager({
       const data = await res.json()
       setArticles(data)
     } catch {
-      showToast("فشل في تحميل المقالات", "error")
+      showToast("Failed to load articles", "error")
     }
     setLoading(false)
   }, [showToast])
@@ -394,7 +405,7 @@ function PostManager({
           body: JSON.stringify(article),
         })
         if (!res.ok) throw new Error()
-        showToast("تم اضافة المقال بنجاح")
+        showToast("Article created successfully")
       } else {
         const res = await fetch(`/api/articles/${article.id}`, {
           method: "PUT",
@@ -402,13 +413,13 @@ function PostManager({
           body: JSON.stringify(article),
         })
         if (!res.ok) throw new Error()
-        showToast("تم تحديث المقال بنجاح")
+        showToast("Article updated successfully")
       }
       setEditing(null)
       setIsNew(false)
       loadArticles()
     } catch {
-      showToast("فشل في حفظ المقال", "error")
+      showToast("Failed to save article", "error")
     }
   }
 
@@ -416,11 +427,11 @@ function PostManager({
     try {
       const res = await fetch(`/api/articles/${id}`, { method: "DELETE" })
       if (!res.ok) throw new Error()
-      showToast("تم حذف المقال بنجاح")
+      showToast("Article deleted successfully")
       setConfirmDelete(null)
       loadArticles()
     } catch {
-      showToast("فشل في حذف المقال", "error")
+      showToast("Failed to delete article", "error")
     }
   }
 
@@ -431,20 +442,18 @@ function PostManager({
     description: "",
     content: "",
     category: "apps",
-    imageUrl: "",
-    isFeatured: false,
+    image_url: "",
+    is_featured: false,
     specs: [
       { label: "Version", value: "" },
       { label: "Platform", value: "" },
       { label: "Size", value: "" },
       { label: "License", value: "" },
     ],
-    downloadUrl: "",
-    enableAds: true,
-    enableTimer: true,
-    enableViralLock: false,
-    createdAt: "",
-    updatedAt: "",
+    download_url: "",
+    enable_timer: true,
+    created_at: "",
+    updated_at: "",
   })
 
   if (editing) {
@@ -466,9 +475,9 @@ function PostManager({
     <div>
       <div className="mb-6 flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-foreground">المقالات</h2>
-          <p className="text-xs text-muted-foreground">
-            {articles.length} {"مقال"}
+          <h2 className="text-lg font-bold text-zinc-100">Articles</h2>
+          <p className="text-xs text-zinc-500">
+            {articles.length} article{articles.length !== 1 ? "s" : ""}
           </p>
         </div>
         <button
@@ -478,16 +487,17 @@ function PostManager({
             setIsNew(true)
           }}
           className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all hover:opacity-90"
+          style={{ boxShadow: "0 0 15px rgba(255,215,0,0.3)" }}
         >
           <Plus className="h-4 w-4" />
-          مقال جديد
+          New Article
         </button>
       </div>
 
       {articles.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16">
-          <FileText className="mb-3 h-8 w-8 text-muted-foreground/50" />
-          <p className="text-sm text-muted-foreground">لا توجد مقالات بعد</p>
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 py-16">
+          <FileText className="mb-3 h-8 w-8 text-zinc-600" />
+          <p className="text-sm text-zinc-500">No articles yet</p>
           <button
             type="button"
             onClick={() => {
@@ -496,7 +506,7 @@ function PostManager({
             }}
             className="mt-3 text-xs font-medium text-primary hover:underline"
           >
-            اضف مقال جديد
+            Add your first article
           </button>
         </div>
       ) : (
@@ -504,7 +514,7 @@ function PostManager({
           {articles.map((article) => (
             <div
               key={article.id}
-              className="flex items-center gap-4 rounded-xl border border-border bg-card p-4 transition-colors hover:border-border"
+              className="flex items-center gap-4 rounded-xl border border-white/5 bg-zinc-900/50 p-4 backdrop-blur-md transition-colors hover:border-white/10"
             >
               <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10">
                 <span className="text-sm font-bold text-primary">
@@ -512,34 +522,21 @@ function PostManager({
                 </span>
               </div>
               <div className="min-w-0 flex-1">
-                <h3
-                  className="truncate text-sm font-bold text-foreground"
-                  dir="ltr"
-                >
+                <h3 className="truncate text-sm font-bold text-zinc-100">
                   {article.title}
                 </h3>
                 <div className="mt-1 flex flex-wrap items-center gap-2">
                   <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[10px] text-primary">
                     {article.category}
                   </span>
-                  {article.isFeatured && (
-                    <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] text-amber-500">
-                      مميز
+                  {article.is_featured && (
+                    <span className="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] text-amber-400">
+                      Featured
                     </span>
                   )}
-                  {article.enableTimer && (
+                  {article.enable_timer && (
                     <span className="rounded-full bg-blue-500/10 px-2 py-0.5 text-[10px] text-blue-400">
-                      مؤقت
-                    </span>
-                  )}
-                  {article.enableAds && (
-                    <span className="rounded-full bg-green-500/10 px-2 py-0.5 text-[10px] text-green-400">
-                      اعلانات
-                    </span>
-                  )}
-                  {article.enableViralLock && (
-                    <span className="rounded-full bg-red-500/10 px-2 py-0.5 text-[10px] text-red-400">
-                      قفل فيروسي
+                      Timer
                     </span>
                   )}
                 </div>
@@ -551,8 +548,8 @@ function PostManager({
                     setEditing(article)
                     setIsNew(false)
                   }}
-                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-transparent text-muted-foreground transition-all hover:border-primary/50 hover:text-primary"
-                  aria-label="تعديل المقال"
+                  className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-transparent text-zinc-400 transition-all hover:border-primary/50 hover:text-primary"
+                  aria-label="Edit article"
                 >
                   <Pencil className="h-3.5 w-3.5" />
                 </button>
@@ -562,16 +559,16 @@ function PostManager({
                       type="button"
                       onClick={() => handleDelete(article.id)}
                       className="flex h-8 items-center gap-1 rounded-lg border border-destructive/50 bg-transparent px-2 text-[10px] font-medium text-destructive transition-all hover:bg-destructive/10"
-                      aria-label="تأكيد الحذف"
+                      aria-label="Confirm delete"
                     >
                       <Check className="h-3 w-3" />
-                      تأكيد
+                      Confirm
                     </button>
                     <button
                       type="button"
                       onClick={() => setConfirmDelete(null)}
-                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-transparent text-muted-foreground hover:text-foreground"
-                      aria-label="الغاء"
+                      className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-transparent text-zinc-400 hover:text-zinc-100"
+                      aria-label="Cancel"
                     >
                       <X className="h-3.5 w-3.5" />
                     </button>
@@ -580,8 +577,8 @@ function PostManager({
                   <button
                     type="button"
                     onClick={() => setConfirmDelete(article.id)}
-                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-border bg-transparent text-muted-foreground transition-all hover:border-destructive/50 hover:text-destructive"
-                    aria-label="حذف المقال"
+                    className="flex h-8 w-8 items-center justify-center rounded-lg border border-white/10 bg-transparent text-zinc-400 transition-all hover:border-destructive/50 hover:text-destructive"
+                    aria-label="Delete article"
                   >
                     <Trash2 className="h-3.5 w-3.5" />
                   </button>
@@ -630,27 +627,27 @@ function ArticleEditor({
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
-        <h2 className="text-lg font-bold text-foreground">
-          {article.id ? "تعديل المقال" : "مقال جديد"}
+        <h2 className="text-lg font-bold text-zinc-100">
+          {article.id ? "Edit Article" : "New Article"}
         </h2>
         <button
           type="button"
           onClick={onCancel}
-          className="flex items-center gap-2 rounded-lg border border-border bg-transparent px-3 py-1.5 text-xs text-muted-foreground hover:text-foreground"
+          className="flex items-center gap-2 rounded-lg border border-white/10 bg-transparent px-3 py-1.5 text-xs text-zinc-400 hover:text-zinc-100"
         >
           <X className="h-3.5 w-3.5" />
-          الغاء
+          Cancel
         </button>
       </div>
 
       <SectionCard
-        title="المعلومات الاساسية"
+        title="Basic Info"
         icon={<FileText className="h-4 w-4" />}
       >
         <div className="grid gap-4">
           <div>
-            <label className="mb-1.5 block text-xs text-muted-foreground">
-              العنوان <span className="text-destructive">*</span>
+            <label className="mb-1.5 block text-xs text-zinc-500">
+              Title <span className="text-destructive">*</span>
             </label>
             <input
               type="text"
@@ -660,93 +657,87 @@ function ArticleEditor({
                 if (!article.id)
                   update("slug", generateSlug(e.target.value))
               }}
-              className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-              dir="ltr"
+              className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
               placeholder="Article title..."
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-muted-foreground">
-              الرابط المختصر <span className="text-destructive">*</span>
+            <label className="mb-1.5 block text-xs text-zinc-500">
+              Slug <span className="text-destructive">*</span>
             </label>
             <input
               type="text"
               value={form.slug}
               onChange={(e) => update("slug", e.target.value)}
-              className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm font-mono text-foreground focus:border-primary focus:outline-none"
-              dir="ltr"
+              className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm font-mono text-zinc-100 focus:border-primary focus:outline-none"
               placeholder="article-slug"
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-muted-foreground">
-              الوصف
+            <label className="mb-1.5 block text-xs text-zinc-500">
+              Description
             </label>
             <textarea
               value={form.description}
               onChange={(e) => update("description", e.target.value)}
               rows={2}
-              className="w-full resize-none rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-              dir="ltr"
+              className="w-full resize-none rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
               placeholder="Short description..."
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-muted-foreground">
-              المحتوى
+            <label className="mb-1.5 block text-xs text-zinc-500">
+              Content
             </label>
             <textarea
               value={form.content}
               onChange={(e) => update("content", e.target.value)}
               rows={8}
-              className="w-full resize-none rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-              dir="ltr"
+              className="w-full resize-none rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
               placeholder="Full article content... Use - for bullet points"
             />
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
             <div>
-              <label className="mb-1.5 block text-xs text-muted-foreground">
-                التصنيف
+              <label className="mb-1.5 block text-xs text-zinc-500">
+                Category
               </label>
               <div className="relative">
                 <select
                   value={form.category}
                   onChange={(e) => update("category", e.target.value)}
-                  className="w-full appearance-none rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
+                  className="w-full appearance-none rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
                 >
                   <option value="apps">Apps</option>
                   <option value="games">Games</option>
                   <option value="ai-tools">AI Tools</option>
                   <option value="gift-cards">Gift Cards</option>
                 </select>
-                <ChevronDown className="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <ChevronDown className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-zinc-500" />
               </div>
             </div>
             <div>
-              <label className="mb-1.5 block text-xs text-muted-foreground">
-                رابط التحميل
+              <label className="mb-1.5 block text-xs text-zinc-500">
+                Download URL
               </label>
               <input
                 type="text"
-                value={form.downloadUrl}
-                onChange={(e) => update("downloadUrl", e.target.value)}
-                className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-                dir="ltr"
+                value={form.download_url}
+                onChange={(e) => update("download_url", e.target.value)}
+                className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
                 placeholder="https://..."
               />
             </div>
           </div>
           <div>
-            <label className="mb-1.5 block text-xs text-muted-foreground">
-              رابط الصورة
+            <label className="mb-1.5 block text-xs text-zinc-500">
+              Image URL
             </label>
             <input
               type="text"
-              value={form.imageUrl}
-              onChange={(e) => update("imageUrl", e.target.value)}
-              className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-              dir="ltr"
+              value={form.image_url}
+              onChange={(e) => update("image_url", e.target.value)}
+              className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
               placeholder="https://..."
             />
           </div>
@@ -755,40 +746,28 @@ function ArticleEditor({
 
       {/* Toggles */}
       <SectionCard
-        title="خيارات المقال"
+        title="Article Options"
         icon={<Settings className="h-4 w-4" />}
       >
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3">
           <ToggleSwitch
-            label="مميز"
-            description="اظهار في القسم البارز"
-            checked={form.isFeatured}
-            onChange={(v) => update("isFeatured", v)}
+            label="Featured"
+            description="Show in featured section"
+            checked={form.is_featured}
+            onChange={(v) => update("is_featured", v)}
           />
           <ToggleSwitch
-            label="اعلانات"
-            description="عرض اماكن الاعلانات"
-            checked={form.enableAds}
-            onChange={(v) => update("enableAds", v)}
-          />
-          <ToggleSwitch
-            label="مؤقت"
-            description="تفعيل العد التنازلي"
-            checked={form.enableTimer}
-            onChange={(v) => update("enableTimer", v)}
-          />
-          <ToggleSwitch
-            label="قفل فيروسي"
-            description="مشاركة قبل التحميل"
-            checked={form.enableViralLock}
-            onChange={(v) => update("enableViralLock", v)}
+            label="Timer"
+            description="Enable countdown timer"
+            checked={form.enable_timer}
+            onChange={(v) => update("enable_timer", v)}
           />
         </div>
       </SectionCard>
 
       {/* Specs */}
       <SectionCard
-        title="المواصفات"
+        title="Specifications"
         icon={<FileText className="h-4 w-4" />}
       >
         <div className="space-y-3">
@@ -802,8 +781,7 @@ function ArticleEditor({
                   newSpecs[i] = { ...newSpecs[i], label: e.target.value }
                   update("specs", newSpecs)
                 }}
-                className="w-1/3 rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-                dir="ltr"
+                className="w-1/3 rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
                 placeholder="Label"
               />
               <input
@@ -814,8 +792,7 @@ function ArticleEditor({
                   newSpecs[i] = { ...newSpecs[i], value: e.target.value }
                   update("specs", newSpecs)
                 }}
-                className="flex-1 rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-                dir="ltr"
+                className="flex-1 rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
                 placeholder="Value"
               />
               <button
@@ -824,8 +801,8 @@ function ArticleEditor({
                   const newSpecs = form.specs.filter((_, idx) => idx !== i)
                   update("specs", newSpecs)
                 }}
-                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-border bg-transparent text-muted-foreground hover:text-destructive"
-                aria-label="حذف المواصفة"
+                className="flex h-9 w-9 flex-shrink-0 items-center justify-center rounded-lg border border-white/10 bg-transparent text-zinc-400 hover:text-destructive"
+                aria-label="Remove spec"
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -838,7 +815,7 @@ function ArticleEditor({
             }
             className="text-xs text-primary hover:underline"
           >
-            + اضافة مواصفة
+            + Add specification
           </button>
         </div>
       </SectionCard>
@@ -849,16 +826,17 @@ function ArticleEditor({
           onClick={handleSubmit}
           disabled={saving || !form.title.trim() || !form.slug.trim()}
           className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
+          style={{ boxShadow: "0 0 15px rgba(255,215,0,0.3)" }}
         >
           <Save className="h-4 w-4" />
-          {saving ? "جاري الحفظ..." : "حفظ المقال"}
+          {saving ? "Saving..." : "Save Article"}
         </button>
         <button
           type="button"
           onClick={onCancel}
-          className="rounded-xl border border-border bg-transparent px-6 py-3 text-sm text-muted-foreground transition-all hover:text-foreground"
+          className="rounded-xl border border-white/10 bg-transparent px-6 py-3 text-sm text-zinc-400 transition-all hover:text-zinc-100"
         >
-          الغاء
+          Cancel
         </button>
       </div>
     </div>
@@ -884,7 +862,7 @@ function SocialProofEditor({
         setLoading(false)
       })
       .catch(() => {
-        showToast("فشل في تحميل الاشعارات", "error")
+        showToast("Failed to load notifications", "error")
         setLoading(false)
       })
   }, [showToast])
@@ -898,9 +876,9 @@ function SocialProofEditor({
         body: JSON.stringify(items),
       })
       if (!res.ok) throw new Error()
-      showToast("تم حفظ الاشعارات بنجاح")
+      showToast("Social proof saved successfully")
     } catch {
-      showToast("فشل في حفظ الاشعارات", "error")
+      showToast("Failed to save notifications", "error")
     }
     setSaving(false)
   }
@@ -917,9 +895,9 @@ function SocialProofEditor({
       {
         id: Date.now().toString(),
         name: "",
-        giftCardType: "",
+        gift_card_type: "",
         price: "",
-        timeAgo: "",
+        time_ago: "",
       },
     ])
   }
@@ -934,35 +912,34 @@ function SocialProofEditor({
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-lg font-bold text-foreground">
-            الاشعارات الاجتماعية
+          <h2 className="text-lg font-bold text-zinc-100">
+            Social Proof Notifications
           </h2>
-          <p className="text-xs text-muted-foreground">
-            {items.length} {"اشعار - تظهر بشكل عشوائي للزوار"}
+          <p className="text-xs text-zinc-500">
+            {items.length} notification{items.length !== 1 ? "s" : ""} - shown randomly to visitors
           </p>
         </div>
         <button
           type="button"
           onClick={addItem}
           className="flex items-center gap-2 rounded-xl bg-primary px-4 py-2 text-xs font-bold text-primary-foreground transition-all hover:opacity-90"
+          style={{ boxShadow: "0 0 15px rgba(255,215,0,0.3)" }}
         >
           <Plus className="h-4 w-4" />
-          اشعار جديد
+          New Notification
         </button>
       </div>
 
       {items.length === 0 ? (
-        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-border py-16">
-          <Users className="mb-3 h-8 w-8 text-muted-foreground/50" />
-          <p className="text-sm text-muted-foreground">
-            لا توجد اشعارات بعد
-          </p>
+        <div className="flex flex-col items-center justify-center rounded-xl border border-dashed border-white/10 py-16">
+          <Users className="mb-3 h-8 w-8 text-zinc-600" />
+          <p className="text-sm text-zinc-500">No notifications yet</p>
           <button
             type="button"
             onClick={addItem}
             className="mt-3 text-xs font-medium text-primary hover:underline"
           >
-            اضف اشعار جديد
+            Add your first notification
           </button>
         </div>
       ) : (
@@ -970,12 +947,11 @@ function SocialProofEditor({
           {items.map((item, i) => (
             <div
               key={item.id}
-              className="rounded-xl border border-border bg-card p-4"
+              className="rounded-xl border border-white/5 bg-zinc-900/50 p-4 backdrop-blur-md"
             >
               <div className="mb-3 flex items-center justify-between">
-                <span className="text-xs font-medium text-muted-foreground">
-                  {"اشعار رقم "}
-                  {i + 1}
+                <span className="text-xs font-medium text-zinc-500">
+                  Notification #{i + 1}
                 </span>
                 <button
                   type="button"
@@ -983,63 +959,59 @@ function SocialProofEditor({
                   className="flex items-center gap-1 text-xs text-destructive hover:underline"
                 >
                   <Trash2 className="h-3 w-3" />
-                  حذف
+                  Remove
                 </button>
               </div>
               <div className="grid gap-3 sm:grid-cols-2">
                 <div>
-                  <label className="mb-1 block text-[10px] text-muted-foreground">
-                    الاسم
+                  <label className="mb-1 block text-[10px] text-zinc-500">
+                    Masked Name
                   </label>
                   <input
                     type="text"
                     value={item.name}
                     onChange={(e) => updateItem(i, "name", e.target.value)}
-                    className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-                    dir="ltr"
-                    placeholder="Ahmed K."
+                    className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
+                    placeholder="Mo****ed K."
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-[10px] text-muted-foreground">
-                    نوع البطاقة
+                  <label className="mb-1 block text-[10px] text-zinc-500">
+                    Product / Service
                   </label>
                   <input
                     type="text"
-                    value={item.giftCardType}
+                    value={item.gift_card_type}
                     onChange={(e) =>
-                      updateItem(i, "giftCardType", e.target.value)
+                      updateItem(i, "gift_card_type", e.target.value)
                     }
-                    className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-                    dir="ltr"
-                    placeholder="Amazon Gift Card"
+                    className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
+                    placeholder="ChatGPT Pro"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-[10px] text-muted-foreground">
-                    السعر
+                  <label className="mb-1 block text-[10px] text-zinc-500">
+                    Access Type
                   </label>
                   <input
                     type="text"
                     value={item.price}
                     onChange={(e) => updateItem(i, "price", e.target.value)}
-                    className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-                    dir="ltr"
-                    placeholder="$50"
+                    className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
+                    placeholder="Premium"
                   />
                 </div>
                 <div>
-                  <label className="mb-1 block text-[10px] text-muted-foreground">
-                    الوقت
+                  <label className="mb-1 block text-[10px] text-zinc-500">
+                    Time Ago
                   </label>
                   <input
                     type="text"
-                    value={item.timeAgo}
+                    value={item.time_ago}
                     onChange={(e) =>
-                      updateItem(i, "timeAgo", e.target.value)
+                      updateItem(i, "time_ago", e.target.value)
                     }
-                    className="w-full rounded-lg border border-border bg-secondary px-3 py-2 text-sm text-foreground focus:border-primary focus:outline-none"
-                    dir="ltr"
+                    className="w-full rounded-lg border border-white/10 bg-zinc-900 px-3 py-2 text-sm text-zinc-100 focus:border-primary focus:outline-none"
                     placeholder="2 min ago"
                   />
                 </div>
@@ -1054,9 +1026,10 @@ function SocialProofEditor({
         onClick={handleSave}
         disabled={saving}
         className="flex items-center gap-2 rounded-xl bg-primary px-6 py-3 text-sm font-bold text-primary-foreground transition-all hover:opacity-90 disabled:opacity-50"
+        style={{ boxShadow: "0 0 15px rgba(255,215,0,0.3)" }}
       >
         <Save className="h-4 w-4" />
-        {saving ? "جاري الحفظ..." : "حفظ الاشعارات"}
+        {saving ? "Saving..." : "Save Notifications"}
       </button>
     </div>
   )
@@ -1073,10 +1046,10 @@ function SectionCard({
   children: React.ReactNode
 }) {
   return (
-    <div className="rounded-xl border border-border bg-card">
-      <div className="flex items-center gap-2 border-b border-border/50 px-5 py-3">
+    <div className="rounded-xl border border-white/5 bg-zinc-900/50 backdrop-blur-md">
+      <div className="flex items-center gap-2 border-b border-white/5 px-5 py-3">
         <span className="text-primary">{icon}</span>
-        <h3 className="text-sm font-bold text-foreground">{title}</h3>
+        <h3 className="text-sm font-bold text-zinc-100">{title}</h3>
       </div>
       <div className="p-5">{children}</div>
     </div>
@@ -1098,26 +1071,26 @@ function ToggleSwitch({
     <button
       type="button"
       onClick={() => onChange(!checked)}
-      className="flex flex-col items-start gap-2 rounded-lg border border-border bg-secondary/50 p-3 text-right transition-all hover:border-primary/30"
+      className="flex flex-col items-start gap-2 rounded-lg border border-white/5 bg-zinc-900/50 p-3 text-left transition-all hover:border-primary/30"
     >
       <div className="flex w-full items-center justify-between">
-        <span className="text-xs font-medium text-foreground">{label}</span>
+        <span className="text-xs font-medium text-zinc-100">{label}</span>
         <div
           className={`relative h-5 w-9 rounded-full transition-colors ${
-            checked ? "bg-primary" : "bg-muted"
+            checked ? "bg-primary" : "bg-zinc-700"
           }`}
         >
           <div
             className={`absolute top-0.5 h-4 w-4 rounded-full transition-all ${
               checked
                 ? "bg-primary-foreground right-0.5"
-                : "bg-muted-foreground right-[calc(100%-18px)]"
+                : "bg-zinc-400 right-[calc(100%-18px)]"
             }`}
           />
         </div>
       </div>
       {description && (
-        <span className="text-[10px] text-muted-foreground">
+        <span className="text-[10px] text-zinc-500">
           {description}
         </span>
       )}
@@ -1129,7 +1102,7 @@ function LoadingSkeleton() {
   return (
     <div className="space-y-6">
       {[1, 2, 3].map((i) => (
-        <div key={i} className="h-32 animate-pulse rounded-xl bg-secondary" />
+        <div key={i} className="h-32 animate-pulse rounded-xl bg-zinc-900" />
       ))}
     </div>
   )

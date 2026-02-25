@@ -80,12 +80,12 @@ const config: Config = {
           from: { height: 'var(--radix-accordion-content-height)' },
           to: { height: '0' },
         },
-        'neon-pulse': {
+        'gold-pulse': {
           '0%, 100%': {
-            boxShadow: '0 0 5px #00f3ff, 0 0 10px #00f3ff, 0 0 20px #00f3ff',
+            boxShadow: '0 0 5px rgba(255,215,0,0.3), 0 0 10px rgba(255,215,0,0.15)',
           },
           '50%': {
-            boxShadow: '0 0 10px #00f3ff, 0 0 30px #00f3ff, 0 0 60px #00f3ff, 0 0 100px #00f3ff',
+            boxShadow: '0 0 15px rgba(255,215,0,0.4), 0 0 30px rgba(255,215,0,0.2), 0 0 60px rgba(255,215,0,0.1)',
           },
         },
         shimmer: {
@@ -100,7 +100,7 @@ const config: Config = {
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'neon-pulse': 'neon-pulse 2s ease-in-out infinite',
+        'gold-pulse': 'gold-pulse 2s ease-in-out infinite',
         shimmer: 'shimmer 2s linear infinite',
         'fade-in-up': 'fade-in-up 0.5s ease-out',
       },

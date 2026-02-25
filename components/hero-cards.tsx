@@ -1,7 +1,6 @@
 "use client"
 
 import React from "react"
-
 import Link from "next/link"
 import { motion } from "framer-motion"
 import { ArrowRight, Star, Zap, Sparkles } from "lucide-react"
@@ -14,26 +13,19 @@ const categoryIcons: Record<string, React.ReactNode> = {
   "gift-cards": <Star className="h-4 w-4" />,
 }
 
-const categoryGradients: Record<string, string> = {
-  "ai-tools": "from-cyan-500/20 via-blue-500/10 to-transparent",
-  apps: "from-emerald-500/20 via-cyan-500/10 to-transparent",
-  games: "from-purple-500/20 via-pink-500/10 to-transparent",
-  "gift-cards": "from-amber-500/20 via-orange-500/10 to-transparent",
-}
-
 export function HeroCards({ articles }: { articles: Article[] }) {
-  const featured = articles.filter((a) => a.isFeatured).slice(0, 3)
+  const featured = articles.filter((a) => a.is_featured).slice(0, 3)
 
   if (featured.length === 0) return null
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-8">
       <div className="mb-6 flex items-center gap-3">
-        <div className="h-px flex-1 bg-gradient-to-r from-primary/50 to-transparent" />
+        <div className="h-px flex-1 bg-gradient-to-r from-primary/30 to-transparent" />
         <h2 className="text-sm font-semibold uppercase tracking-widest text-primary">
           Featured
         </h2>
-        <div className="h-px flex-1 bg-gradient-to-l from-primary/50 to-transparent" />
+        <div className="h-px flex-1 bg-gradient-to-l from-primary/30 to-transparent" />
       </div>
 
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
@@ -45,10 +37,10 @@ export function HeroCards({ articles }: { articles: Article[] }) {
             transition={{ delay: i * 0.1, duration: 0.4 }}
           >
             <Link href={`/article/${article.slug}`} className="group block">
-              <div className="relative overflow-hidden rounded-2xl border border-border bg-card transition-all duration-300 hover:border-primary/50">
-                <div
-                  className={`absolute inset-0 bg-gradient-to-br ${categoryGradients[article.category]} opacity-50`}
-                />
+              <div
+                className="relative overflow-hidden rounded-2xl border border-white/5 bg-zinc-900/50 backdrop-blur-md transition-all duration-300 hover:border-primary/20"
+                style={{ boxShadow: "0 0 15px rgba(255,215,0,0.03)" }}
+              >
                 <div className="relative p-6">
                   <div className="mb-4 flex items-center gap-2">
                     <span className="flex h-7 w-7 items-center justify-center rounded-lg bg-primary/10 text-primary">
@@ -58,16 +50,19 @@ export function HeroCards({ articles }: { articles: Article[] }) {
                       {article.category.replace("-", " ")}
                     </span>
                     {i === 0 && (
-                      <span className="ml-auto rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-semibold text-primary">
+                      <span
+                        className="ml-auto rounded-full bg-primary/20 px-2.5 py-0.5 text-xs font-semibold text-primary"
+                        style={{ boxShadow: "0 0 10px rgba(255,215,0,0.2)" }}
+                      >
                         HOT
                       </span>
                     )}
                   </div>
 
-                  <h3 className="mb-2 text-lg font-bold text-foreground transition-colors group-hover:text-primary">
+                  <h3 className="mb-2 text-lg font-bold text-zinc-100 transition-colors group-hover:text-primary">
                     {article.title}
                   </h3>
-                  <p className="mb-6 line-clamp-2 text-sm leading-relaxed text-muted-foreground">
+                  <p className="mb-6 line-clamp-2 text-sm leading-relaxed text-zinc-500">
                     {article.description}
                   </p>
 
@@ -80,7 +75,7 @@ export function HeroCards({ articles }: { articles: Article[] }) {
                 <div
                   className="pointer-events-none absolute inset-0 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
                   style={{
-                    boxShadow: "inset 0 0 30px rgba(0,243,255,0.05)",
+                    boxShadow: "inset 0 0 30px rgba(255,215,0,0.03)",
                   }}
                 />
               </div>

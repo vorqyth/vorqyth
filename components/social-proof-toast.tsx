@@ -2,14 +2,25 @@
 
 import { useState, useEffect } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import { Gift, X } from "lucide-react"
+import { Sparkles, X } from "lucide-react"
 
 interface ProofItem {
   id: string
   name: string
-  giftCardType: string
+  gift_card_type: string
   price: string
-  timeAgo: string
+  time_ago: string
+}
+
+function maskName(name: string): string {
+  // If already masked (contains asterisks), return as-is
+  if (name.includes("*")) return name
+  // Otherwise, mask: keep first 2 chars and last char
+  if (name.length <= 3) return name
+  const first = name.slice(0, 2)
+  const last = name.slice(-1)
+  const stars = "****"
+  return `${first}${stars}${last}`
 }
 
 export function SocialProofToast() {
@@ -23,7 +34,7 @@ export function SocialProofToast() {
       try {
         const res = await fetch("/api/social-proof")
         const items: ProofItem[] = await res.json()
-        if (items.length === 0) return
+        if (!Array.isArray(items) || items.length === 0) return
 
         const randomItem = items[Math.floor(Math.random() * items.length)]
         setCurrent(randomItem)
@@ -53,21 +64,24 @@ export function SocialProofToast() {
           animate={{ x: 0, opacity: 1 }}
           exit={{ x: -100, opacity: 0 }}
           transition={{ type: "spring", damping: 20 }}
-          className="fixed bottom-4 left-4 z-50 flex max-w-xs items-center gap-3 rounded-xl border border-primary/30 bg-card/95 p-3 shadow-lg backdrop-blur-md"
-          style={{ boxShadow: "0 0 20px rgba(0,243,255,0.1)" }}
+          className="fixed bottom-4 left-4 z-50 flex max-w-xs items-center gap-3 rounded-xl border border-white/10 bg-zinc-900/80 p-3 shadow-lg backdrop-blur-md"
+          style={{ boxShadow: "0 0 20px rgba(255,215,0,0.08), 0 4px 20px rgba(0,0,0,0.3)" }}
         >
-          <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary">
-            <Gift className="h-5 w-5" />
+          <div
+            className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-primary/10 text-primary"
+            style={{ boxShadow: "0 0 10px rgba(255,215,0,0.15)" }}
+          >
+            <Sparkles className="h-5 w-5" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-xs font-bold text-foreground">
-              {current.name}{" "}
-              <span className="font-normal text-muted-foreground">received</span>
+            <p className="text-xs font-bold text-zinc-100">
+              {maskName(current.name)}{" "}
+              <span className="font-normal text-zinc-500">just accessed</span>
             </p>
             <p className="text-xs text-primary">
-              {current.giftCardType} - {current.price}
+              {current.gift_card_type} - {current.price}
             </p>
-            <p className="text-[10px] text-muted-foreground">{current.timeAgo}</p>
+            <p className="text-[10px] text-zinc-600">{current.time_ago}</p>
           </div>
           <button
             type="button"
@@ -75,7 +89,7 @@ export function SocialProofToast() {
               setCurrent(null)
               setDismissed(true)
             }}
-            className="flex-shrink-0 text-muted-foreground hover:text-foreground"
+            className="flex-shrink-0 text-zinc-600 hover:text-zinc-300"
             aria-label="Dismiss notification"
           >
             <X className="h-3.5 w-3.5" />

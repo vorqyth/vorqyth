@@ -28,8 +28,8 @@ export function CategoryTabs({ articles }: { articles: Article[] }) {
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-8">
-      <h2 className="mb-6 text-lg font-bold text-foreground">
-        Browse by <span className="neon-text">Category</span>
+      <h2 className="mb-6 text-lg font-bold text-zinc-100">
+        Browse by <span className="gold-text">Category</span>
       </h2>
 
       <div className="mb-6 flex flex-wrap gap-2">
@@ -41,7 +41,7 @@ export function CategoryTabs({ articles }: { articles: Article[] }) {
             className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-all ${
               active === cat.key
                 ? "border border-primary/50 bg-primary/10 text-primary"
-                : "border border-border bg-secondary text-muted-foreground hover:border-primary/30 hover:text-foreground"
+                : "border border-white/5 bg-zinc-900 text-zinc-500 hover:border-primary/20 hover:text-zinc-300"
             }`}
           >
             {cat.icon}
@@ -63,7 +63,8 @@ export function CategoryTabs({ articles }: { articles: Article[] }) {
             <Link
               key={article.id}
               href={`/article/${article.slug}`}
-              className="group flex gap-4 rounded-xl border border-border bg-card p-4 transition-all duration-200 hover:border-primary/40"
+              className="group flex gap-4 rounded-xl border border-white/5 bg-zinc-900/50 p-4 backdrop-blur-md transition-all duration-200 hover:border-primary/20"
+              style={{ boxShadow: "0 0 15px rgba(255,215,0,0.03)" }}
             >
               <div className="flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-xl bg-primary/10">
                 <span className="text-lg font-bold text-primary">
@@ -71,10 +72,10 @@ export function CategoryTabs({ articles }: { articles: Article[] }) {
                 </span>
               </div>
               <div className="flex-1 min-w-0">
-                <h3 className="mb-1 text-sm font-bold text-foreground transition-colors group-hover:text-primary truncate">
+                <h3 className="mb-1 text-sm font-bold text-zinc-100 transition-colors group-hover:text-primary truncate">
                   {article.title}
                 </h3>
-                <p className="mb-2 line-clamp-1 text-xs text-muted-foreground">
+                <p className="mb-2 line-clamp-1 text-xs text-zinc-500">
                   {article.description}
                 </p>
                 <div className="flex items-center gap-1 text-xs font-medium text-primary">
@@ -89,7 +90,7 @@ export function CategoryTabs({ articles }: { articles: Article[] }) {
 
       {filtered.length === 0 && (
         <div className="flex flex-col items-center justify-center py-16">
-          <p className="text-sm text-muted-foreground">
+          <p className="text-sm text-zinc-500">
             No articles found in this category.
           </p>
         </div>
