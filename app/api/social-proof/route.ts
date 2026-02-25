@@ -1,19 +1,32 @@
 import { NextResponse } from "next/server"
 import { supabase } from "@/lib/supabase"
 
-export async function GET() {
-  const { data, error } = await supabase
-    .from("social_proof")
-    .select("*")
+const FALLBACK_PROOF = [
+  { id: "1", name: "Mohammed", gift_card_type: "ChatGPT Pro", price: "Free Access", time_ago: "2 minutes ago" },
+  { id: "2", name: "Fatima", gift_card_type: "Netflix Premium", price: "Free Access", time_ago: "5 minutes ago" },
+  { id: "3", name: "Ahmed", gift_card_type: "Spotify Premium", price: "Free Access", time_ago: "8 minutes ago" },
+  { id: "4", name: "Youssef", gift_card_type: "YouTube Premium", price: "Free Access", time_ago: "12 minutes ago" },
+  { id: "5", name: "Khalid", gift_card_type: "Adobe Creative", price: "Free Access", time_ago: "15 minutes ago" },
+  { id: "6", name: "Sara", gift_card_type: "Canva Pro", price: "Free Access", time_ago: "18 minutes ago" },
+  { id: "7", name: "Omar", gift_card_type: "Microsoft 365", price: "Free Access", time_ago: "22 minutes ago" },
+  { id: "8", name: "Layla", gift_card_type: "Midjourney Pro", price: "Free Access", time_ago: "25 minutes ago" },
+]
 
-  if (error) return NextResponse.json([], { status: 200 })
-  return NextResponse.json(data ?? [])
+export async function GET() {
+  try {
+    const { data, error } = await supabase.from("social_proof").select("*")
+    if (!error && data && data.length > 0) {
+      return NextResponse.json(data)
+    }
+  } catch {
+    // table may not exist - use fallback
+  }
+  return NextResponse.json(FALLBACK_PROOF)
 }
 
 export async function PUT(request: Request) {
   const body = await request.json()
 
-  // Clear existing items and insert new ones
   await supabase.from("social_proof").delete().neq("id", "00000000-0000-0000-0000-000000000000")
 
   if (body.length > 0) {
