@@ -15,16 +15,9 @@ export function HomeClient() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    // Debug: discover actual schema
-    fetch("/api/debug-schema")
-      .then((r) => r.json())
-      .then((d) => console.log("[v0] DB Schema Discovery:", JSON.stringify(d, null, 2)))
-      .catch((e) => console.log("[v0] Schema probe error:", e))
-
     fetch("/api/articles")
       .then((r) => r.json())
       .then((data) => {
-        console.log("[v0] Articles API response:", JSON.stringify(data).slice(0, 500))
         setArticles(Array.isArray(data) ? data : [])
         setLoading(false)
       })

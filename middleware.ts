@@ -1,8 +1,6 @@
 import { NextResponse } from "next/server"
 import type { NextRequest } from "next/server"
 
-const TIER_1_COUNTRIES = ["US", "GB", "CA", "AU"]
-
 export async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
 
