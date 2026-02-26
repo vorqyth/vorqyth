@@ -23,16 +23,39 @@ export async function PUT(
   const { id } = await params
   const body = await request.json()
 
-  const updateData: Record<string, unknown> = { updated_at: new Date().toISOString() }
-  const allowedFields = [
-    "title", "slug", "description", "content", "category",
-    "image_url", "is_featured", "specs", "download_url", "enable_timer",
-  ]
+  // Discover which columns actually exist in the table
+  const { data: sample } = await supabase.from("articles").select("*").eq("id", id).single()
+  const knownCols = sample ? Object.keys(sample) : []
 
-  for (const field of allowedFields) {
-    if (body[field] !== undefined) {
-      updateData[field] = body[field]
+  const allFields: Record<string, unknown> = {
+    title: body.title,
+    slug: body.slug,
+    description: body.description,
+    content: body.content,
+    category: body.category,
+    image_url: body.image_url,
+    is_featured: body.is_featured,
+    specs: body.specs,
+    download_url: body.download_url,
+    enable_timer: body.enable_timer,
+    updated_at: new Date().toISOString(),
+  }
+
+  // Only include fields that exist as columns AND were provided in the body
+  const updateData: Record<string, unknown> = {}
+  for (const [key, val] of Object.entries(allFields)) {
+    if (val !== undefined && knownCols.includes(key)) {
+      updateData[key] = val
     }
+  }
+
+  // Always try updated_at if column exists
+  if (knownCols.includes("updated_at")) {
+    updateData.updated_at = new Date().toISOString()
+  }
+
+  if (Object.keys(updateData).length === 0) {
+    return NextResponse.json({ error: "No valid fields to update" }, { status: 400 })
   }
 
   const { data, error } = await supabase
