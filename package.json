@@ -2,6 +2,7 @@
   "name": "my-project",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "pnpm@9.15.4",
   "scripts": {
     "dev": "next dev --turbo",
     "build": "next build",
@@ -44,6 +45,7 @@
     "date-fns": "4.1.0",
     "embla-carousel-react": "8.5.1",
     "input-otp": "1.4.1",
+    "@supabase/supabase-js": "^2.49.1",
     "framer-motion": "^11.15.0",
     "lucide-react": "^0.544.0",
     "swiper": "^11.1.15",
@@ -62,7 +64,6 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4.1.13",
     "@types/node": "^22",
     "@types/react": "19.2.7",
     "@types/react-dom": "19.2.3",

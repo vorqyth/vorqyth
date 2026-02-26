@@ -1,7 +1,7 @@
-import { getArticleBySlug, getArticles } from "@/lib/data"
-import { notFound } from "next/navigation"
 import { ArticleClient } from "@/components/article-client"
 import type { Metadata } from "next"
+
+export const dynamic = "force-dynamic"
 
 export async function generateMetadata({
   params,
@@ -9,11 +9,19 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>
 }): Promise<Metadata> {
   const { slug } = await params
-  const article = getArticleBySlug(slug)
-  if (!article) return { title: "Not Found" }
-  return {
-    title: `${article.title} - Vorqenox`,
-    description: article.description,
+  try {
+    const baseUrl = process.env.VERCEL_URL
+      ? `https://${process.env.VERCEL_URL}`
+      : "http://localhost:3000"
+    const res = await fetch(`${baseUrl}/api/articles?slug=${slug}`)
+    const article = await res.json()
+    if (!article) return { title: "Not Found" }
+    return {
+      title: `${article.title} - Vorqenox`,
+      description: article.description,
+    }
+  } catch {
+    return { title: "Article - Vorqenox" }
   }
 }
 
@@ -23,12 +31,5 @@ export default async function ArticlePage({
   params: Promise<{ slug: string }>
 }) {
   const { slug } = await params
-  const article = getArticleBySlug(slug)
-  if (!article) notFound()
-  const allArticles = getArticles()
-  const related = allArticles
-    .filter((a) => a.category === article.category && a.id !== article.id)
-    .slice(0, 3)
-
-  return <ArticleClient article={article} relatedArticles={related} />
+  return <ArticleClient slug={slug} />
 }

@@ -1,7 +1,11 @@
-// Type definitions shared across the app
-// All data operations now go through Supabase via API routes
+import { createClient } from "@supabase/supabase-js"
 
-export interface Article {
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+
+export const supabase = createClient(supabaseUrl, supabaseAnonKey)
+
+export interface DbArticle {
   id: string
   title: string
   slug: string
@@ -17,7 +21,7 @@ export interface Article {
   updated_at: string
 }
 
-export interface SiteSettings {
+export interface DbSiteSettings {
   id: string
   site_name: string
   logo_url: string
@@ -31,7 +35,7 @@ export interface SiteSettings {
   ipqs_active: boolean
 }
 
-export interface SocialProofItem {
+export interface DbSocialProof {
   id: string
   name: string
   gift_card_type: string

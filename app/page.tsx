@@ -1,7 +1,7 @@
-import { getArticles } from "@/lib/data"
 import { HomeClient } from "@/components/home-client"
 
+export const dynamic = "force-dynamic"
+
 export default function Home() {
-  const articles = getArticles()
-  return <HomeClient articles={articles} />
+  return <HomeClient />
 }

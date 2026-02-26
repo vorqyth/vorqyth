@@ -13,27 +13,26 @@ const geistMono = Geist_Mono({
 })
 
 export const metadata: Metadata = {
-  title: "Vorqenox - The Ultimate Destination for Premium Apps & Tools",
+  title: "Vorqenox - Premium Apps, AI Tools & Digital Access",
   description:
-    "Discover premium apps, games, AI tools, and gift cards. Vorqenox is your ultimate destination for the best digital products and exclusive offers.",
+    "Discover premium apps, games, AI tools, and digital access. Vorqenox is your luxury destination for the best digital products.",
   keywords: [
     "premium apps",
     "AI tools",
-    "gift cards",
-    "games",
     "digital products",
     "Vorqenox",
+    "tech reviews",
   ],
   openGraph: {
-    title: "Vorqenox - Premium Apps & Tools",
+    title: "Vorqenox - Premium Digital Access",
     description:
-      "Discover premium apps, games, AI tools, and gift cards.",
+      "Discover premium apps, games, AI tools, and digital access.",
     type: "website",
   },
 }
 
 export const viewport: Viewport = {
-  themeColor: "#000000",
+  themeColor: "#09090b",
   width: "device-width",
   initialScale: 1,
   maximumScale: 5,
@@ -46,7 +45,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className={`${geistSans.variable} ${geistMono.variable}`}>
-      <body className="font-sans antialiased min-h-screen">{children}</body>
+      <body className="font-sans antialiased min-h-screen bg-zinc-950 text-zinc-100">
+        {children}
+      </body>
     </html>
   )
 }
