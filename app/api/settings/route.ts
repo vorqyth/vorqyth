@@ -49,13 +49,8 @@ export async function GET() {
     .limit(1)
     .maybeSingle()
 
-  if (error) {
-    console.log("[v0] Settings GET error:", error.message, error.code)
-    return NextResponse.json(DEFAULT_SETTINGS)
-  }
+  if (error) return NextResponse.json(DEFAULT_SETTINGS)
   if (!data) return NextResponse.json(DEFAULT_SETTINGS)
-
-  console.log("[v0] Settings GET columns:", Object.keys(data))
   return NextResponse.json(normalizeRow(data))
 }
 
@@ -70,21 +65,19 @@ export async function PUT(request: Request) {
     .maybeSingle()
 
   if (probeErr && probeErr.code !== "PGRST116") {
-    console.log("[v0] Settings probe error:", probeErr.message, probeErr.code)
+    // probe failed for a non-empty-table reason; continue with fallback
   }
 
   // If we got a row, we know the exact columns
   let knownColumns: string[] = []
   if (probe) {
     knownColumns = Object.keys(probe)
-    console.log("[v0] Settings known columns:", knownColumns)
   } else {
     // Table is empty — try inserting with just site_name which is most likely to exist
     knownColumns = ["site_name"]
   }
 
   const safePayload = buildSafePayload(body, knownColumns)
-  console.log("[v0] Settings safe payload:", JSON.stringify(safePayload))
 
   if (probe?.id) {
     // Update existing row
@@ -95,10 +88,7 @@ export async function PUT(request: Request) {
       .select()
       .single()
 
-    if (error) {
-      console.log("[v0] Settings UPDATE error:", error.message, error.code)
-      return NextResponse.json({ error: error.message }, { status: 500 })
-    }
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     return NextResponse.json(normalizeRow(data))
   } else {
     // No row — insert
@@ -108,10 +98,7 @@ export async function PUT(request: Request) {
       .select()
       .single()
 
-    if (error) {
-      console.log("[v0] Settings INSERT error:", error.message, error.code)
-      return NextResponse.json({ error: error.message }, { status: 500 })
-    }
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 })
     return NextResponse.json(normalizeRow(data))
   }
 }
